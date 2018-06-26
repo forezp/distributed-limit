@@ -46,7 +46,7 @@ spring:
     timeout: 0
 ```
 
-## Controller上使用
+## Controller上使用，基于注解、AOP
 
 在Controller上加注解，其中identifier为识别身份的，key为限流的key,limtNum为限制的次数，seconds为多少秒，后2个配置的作用是在多少秒最大的请求次数
 
@@ -88,7 +88,7 @@ public class IndentifierInterceptor extends HandlerInterceptorAdapter {
 
 ```
 
-## 在Interceptor上使用
+## 在Web层的Interceptor、Filter上使用
 
 直接贴代码了，比较简单。
 
@@ -129,7 +129,7 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 
 ```
 
-注册一下：
+注册一下Interceptor：
 
 ```$xslt
 @Configuration
