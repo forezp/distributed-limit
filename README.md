@@ -48,8 +48,8 @@ spring:
 
 ## Controller上使用，基于注解、AOP
 
-在Controller上加注解，其中identifier为识别身份的，key为限流的key,limtNum为限制的次数，seconds为多少秒，后2个配置的作用是在多少秒最大的请求次数
-
+在Controller上加 @Limit注解，其中identifier为识别身份的，key为限流的key,limtNum为限制的次数，seconds为多少秒，后2个配置的作用是在多少秒最大的请求次数
+。其中identifier和key支持Spel表达式。
 
 ```$xslt
 @RestController
@@ -159,7 +159,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 如果有任何问题，可以联系我，miles02@163.com
 
 
-## 后续计划
-
-- @Limit注解支持spel表达式
 
