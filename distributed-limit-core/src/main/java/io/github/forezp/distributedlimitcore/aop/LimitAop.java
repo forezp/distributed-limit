@@ -19,20 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import sun.management.MethodInfo;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /**
  * Email miles02@163.com
@@ -71,7 +65,7 @@ public class LimitAop {
                 String identifier = parseKey( limit.identifier(), method, joinPoint.getArgs() );
                 LimitEntity entity = new LimitEntity();
                 entity.setIdentifier( identifier );
-                if (StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
+                if (!StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
                     entity.setIdentifier( IdentifierThreadLocal.get() );
                 }
                 entity.setLimtNum( limit.limtNum() );
