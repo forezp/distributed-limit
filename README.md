@@ -4,8 +4,7 @@
 ## 这个项目干嘛的?
 
 这个项目是一个Api限流的解决方案，采用的是令牌桶的方式。如果使用的Redis则是分布式限流，如果采用guava的LimitRater，则是本地限流。
-分2给维度限流，一个是用户维度，一个Api维度，读者可自定义。
-仅支持Spring Boot项目。
+分2给维度限流，一个是用户维度，一个Api维度，读者可自定义。仅支持Spring Boot项目。
 
 
 ## 怎么使用？
@@ -49,7 +48,7 @@ spring:
 ## Controller上使用，基于注解、AOP
 
 在Controller上加 @Limit注解，其中identifier为识别身份的，key为限流的key,limtNum为限制的次数，seconds为多少秒，后2个配置的作用是在多少秒最大的请求次数
-。其中identifier和key支持Spel表达式。
+。其中identifier和key支持Spel表达式。如果仅API纬度，则identifier 为空即可；如果仅用户纬度，key为空即可。
 
 ```$xslt
 @RestController
