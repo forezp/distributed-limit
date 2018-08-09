@@ -20,4 +20,8 @@ public class IdentifierThreadLocal {
     public static String get() {
         return identifierThreadLocal.get();
     }
+
+    public static void remove() {
+        identifierThreadLocal.remove();
+    }
 }

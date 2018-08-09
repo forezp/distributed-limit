@@ -24,6 +24,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -74,6 +75,12 @@ public class LimitAop {
                 entity.setSeconds( limit.seconds() );
                 if (!limitExcutor.tryAccess( entity )) {
                     throw new LimitException( "you are not access!" );
+                }
+                if (!StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
+                    entity.setIdentifier( IdentifierThreadLocal.get() );
+                }
+                if (!StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
+                    IdentifierThreadLocal.remove();
                 }
             }
         }
