@@ -189,6 +189,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <scm>
         <tag>v${project.version}</tag>
         <url>git@github.com:forezp/BootNettyRpc.git</url>
