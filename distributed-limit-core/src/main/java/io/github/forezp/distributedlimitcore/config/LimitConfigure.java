@@ -15,13 +15,12 @@ import io.github.forezp.distributedlimitcore.rule.LimitEntityBuilder;
 import io.github.forezp.distributedlimitcore.rule.LimitRuleLoader;
 import io.github.forezp.distributedlimitcore.rule.LocalLimitRuleLoader;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.*;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import javax.servlet.Filter;
+
 
 /**
  * Email miles02@163.com

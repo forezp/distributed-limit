@@ -12,7 +12,7 @@ import java.util.*;
  * Created by forezp on 2019/5/1.
  * @EnableScheduling注解无效，需要在Spring boot启动文件加
  */
-@EnableScheduling
+
 public class ConsolLimitDataCollector extends AbstrctLimitDataCollector {
 
     Logger logger= LoggerFactory.getLogger(ConsolLimitDataCollector.class);

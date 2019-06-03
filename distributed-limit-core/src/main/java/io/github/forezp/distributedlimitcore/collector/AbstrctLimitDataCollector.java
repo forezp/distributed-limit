@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by forezp on 2019/5/1.
  * @EnableScheduling注解无效，需要在Spring boot启动文件加
  */
-@EnableScheduling
 public abstract class AbstrctLimitDataCollector implements LimitDataCollector {
 
 
