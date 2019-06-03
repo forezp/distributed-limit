@@ -1,5 +1,7 @@
 package io.github.forezp.distributedlimitcore.entity;
 
+import io.github.forezp.distributedlimitcore.constant.LimitType;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -10,6 +12,8 @@ import java.util.concurrent.TimeUnit;
  **/
 public class LimitEntity {
 
+
+    private LimitType limitType;
     private String identifier;
 
     private String key;
@@ -49,5 +53,13 @@ public class LimitEntity {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public LimitType getLimitType() {
+        return limitType;
+    }
+
+    public void setLimitType(LimitType limitType) {
+        this.limitType = limitType;
     }
 }

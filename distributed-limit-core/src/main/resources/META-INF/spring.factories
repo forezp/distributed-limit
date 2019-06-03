@@ -1,3 +1,4 @@
 ## AutoConfiguration
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-io.github.forezp.distributedlimitcore.config.LimitConfigure
+io.github.forezp.distributedlimitcore.config.LimitConfigure,\
+io.github.forezp.distributedlimitcore.config.LimitConfigure.FilterLimitConfig

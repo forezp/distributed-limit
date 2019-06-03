@@ -3,6 +3,7 @@ package io.github.forezp.distributedlimitcore.limit;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.RateLimiter;
 import io.github.forezp.distributedlimitcore.entity.LimitEntity;
+import io.github.forezp.distributedlimitcore.entity.LimitResult;
 import io.github.forezp.distributedlimitcore.util.KeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,48 +19,65 @@ import java.util.concurrent.TimeUnit;
  * Email miles02@163.com
  *
  * @author fangzhipeng
- * create 2018-06-26
+ *         create 2018-06-26
  **/
 public class GuavaLimitExcutor implements LimitExcutor {
 
-    Logger log = LoggerFactory.getLogger( GuavaLimitExcutor.class );
+    Logger log = LoggerFactory.getLogger(GuavaLimitExcutor.class);
 
     private Map<String, RateLimiter> rateLimiterMap = Maps.newConcurrentMap();
 
 
     @Override
-    public boolean tryAccess(LimitEntity limitEntity) {
+    public LimitResult tryAccess(LimitEntity limitEntity) {
 
-        RateLimiter rateLimiter = getRateLimiter( limitEntity );
+        RateLimiter rateLimiter = getRateLimiter(limitEntity);
         if (rateLimiter == null) {
-            return false;
+            return null;
         }
-        boolean access = rateLimiter.tryAcquire( 1, 2000, TimeUnit.MILLISECONDS );
-        log.info( limitEntity.getIdentifier() + " access:{}", access );
-        return access;
+        LimitResult limitResult = new LimitResult();
+        limitResult.setUrl(limitEntity.getKey());
+        limitEntity.setIdentifier(limitEntity.getIdentifier());
+        boolean access = rateLimiter.tryAcquire(1, 2000, TimeUnit.MILLISECONDS);
+        log.info("identifier:" + limitEntity.getIdentifier() + " url:" + limitResult.getUrl() + " access:{}", access);
+        if (access) {
+            limitResult.setResultType(LimitResult.ResultType.SUCCESS);
+        } else {
+            limitResult.setResultType(LimitResult.ResultType.FAIL);
+        }
+        return limitResult;
     }
 
     private RateLimiter getRateLimiter(LimitEntity limitEntity) {
         if (limitEntity == null) {
             return null;
         }
-        String key = KeyUtil.compositeKey( limitEntity.getIdentifier(), limitEntity.getKey() );
-        if (StringUtils.isEmpty( key )) {
+        String key =KeyUtil.getKey(limitEntity);
+        if (StringUtils.isEmpty(key)) {
             return null;
         }
-        RateLimiter rateLimiter = rateLimiterMap.get( key );
+        RateLimiter rateLimiter = rateLimiterMap.get(key);
+        Double limitNum = Double.valueOf(String.valueOf(limitEntity.getLimtNum()));
+        Double permitsPerSecond = limitNum / limitEntity.getSeconds();
         if (rateLimiter == null) {
-            Double limitNum = Double.valueOf( String.valueOf( limitEntity.getLimtNum() ) );
-            Double permitsPerSecond = limitNum / limitEntity.getSeconds();
-            RateLimiter newRateLimiter = RateLimiter.create( permitsPerSecond );
-            rateLimiter = rateLimiterMap.putIfAbsent( key, newRateLimiter );
+            RateLimiter newRateLimiter = RateLimiter.create(permitsPerSecond);
+            rateLimiter = rateLimiterMap.putIfAbsent(key, newRateLimiter);
             if (rateLimiter == null) {
                 rateLimiter = newRateLimiter;
+            }
+        }else {
+            if(rateLimiter.getRate()!=permitsPerSecond){
+                RateLimiter newRateLimiter = RateLimiter.create(permitsPerSecond);
+                rateLimiter = rateLimiterMap.put(key, newRateLimiter);
+                if (rateLimiter == null) {
+                    rateLimiter = newRateLimiter;
+                }
             }
         }
         return rateLimiter;
 
     }
+
 
 //    public static void main(String[] args) {
 //        RateLimiter rateLimiter = RateLimiter.create( 0.5 );

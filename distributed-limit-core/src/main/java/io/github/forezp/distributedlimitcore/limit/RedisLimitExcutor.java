@@ -1,6 +1,7 @@
 package io.github.forezp.distributedlimitcore.limit;
 
 import io.github.forezp.distributedlimitcore.entity.LimitEntity;
+import io.github.forezp.distributedlimitcore.entity.LimitResult;
 import io.github.forezp.distributedlimitcore.exception.LimitException;
 import io.github.forezp.distributedlimitcore.util.IdentifierThreadLocal;
 import io.github.forezp.distributedlimitcore.util.KeyUtil;
@@ -31,29 +32,38 @@ public class RedisLimitExcutor implements LimitExcutor {
     }
 
     @Override
-    public boolean tryAccess(LimitEntity limitEntity) {
+    public LimitResult tryAccess(LimitEntity limitEntity) {
         String identifier = limitEntity.getIdentifier();
-        if (StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
-            identifier = IdentifierThreadLocal.get();
-        }
-        if (StringUtils.isEmpty( identifier )) {
-            throw new LimitException( "identifier cannot be null" );
-        }
-        String key = limitEntity.getKey();
-        if (StringUtils.isEmpty( key )) {
-            throw new LimitException( "key cannot be null" );
+//        if (StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
+//            identifier = IdentifierThreadLocal.get();
+//        }
+//        if (StringUtils.isEmpty( identifier )) {
+//            throw new LimitException( "identifier cannot be null" );
+//        }
+        String key =KeyUtil.getKey(limitEntity);
+        if (StringUtils.isEmpty(key)) {
+            return null;
         }
 
         int seconds = limitEntity.getSeconds();
         int limitCount = limitEntity.getLimtNum();
-        String compositeKey = KeyUtil.compositeKey( identifier, key );
+       // String compositeKey = KeyUtil.compositeKey( limitEntity.getIdentifier()==null?"nobody":limitEntity.getIdentifier(), limitEntity.getKey() );
         List<String> keys = new ArrayList<>();
-        keys.add( compositeKey );
+        keys.add( key );
         String luaScript = buildLuaScript();
         RedisScript<Long> redisScript = new DefaultRedisScript<>( luaScript, Long.class );
         Long count = stringRedisTemplate.execute( redisScript, keys, "" + limitCount, "" + seconds );
-        log.info( "Access try count is {} for key={}", count, compositeKey );
-        return count != 0;
+        log.info( "Access try count is {} for key={}", count, key );
+//        return count != 0;
+        LimitResult result=new LimitResult();
+        result.setUrl(key);
+        result.setIdenfier(identifier);
+        if(count!=0){
+           result.setResultType(LimitResult.ResultType.SUCCESS);
+        }else {
+            result.setResultType(LimitResult.ResultType.FAIL);
+        }
+        return result;
     }
 
     private String buildLuaScript() {

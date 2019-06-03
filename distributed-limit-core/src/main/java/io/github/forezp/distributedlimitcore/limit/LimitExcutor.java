@@ -1,7 +1,9 @@
 package io.github.forezp.distributedlimitcore.limit;
 
 
+
 import io.github.forezp.distributedlimitcore.entity.LimitEntity;
+import io.github.forezp.distributedlimitcore.entity.LimitResult;
 
 /**
  * Email miles02@163.com
@@ -12,6 +14,6 @@ import io.github.forezp.distributedlimitcore.entity.LimitEntity;
 
 public interface LimitExcutor {
 
-    public boolean tryAccess(LimitEntity limitEntity);
+    public LimitResult tryAccess(LimitEntity limitEntity);
 
 }

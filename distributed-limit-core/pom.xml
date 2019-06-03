@@ -5,7 +5,7 @@
 
     <groupId>io.github.forezp</groupId>
     <artifactId>distributed-limit-core</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <name>distributed-limit-core</name>
@@ -20,6 +20,8 @@
         <java.version>1.8</java.version>
         <spring.version>4.2.1.RELEASE</spring.version>
         <spring-boot.version>1.5.3.RELEASE</spring-boot.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <httpasyncclient.version>4.1.1</httpasyncclient.version>
     </properties>
 
     <dependencies>
@@ -108,6 +110,24 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>${httpasyncclient.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.56</version>
+        </dependency>
 
     </dependencies>
 

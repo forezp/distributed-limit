@@ -3,6 +3,7 @@ package io.github.forezp.distributedlimitcore.aop;
 import io.github.forezp.distributedlimitcore.annotation.Limit;
 import io.github.forezp.distributedlimitcore.config.condition.AopLimitCondition;
 import io.github.forezp.distributedlimitcore.entity.LimitEntity;
+import io.github.forezp.distributedlimitcore.entity.LimitResult;
 import io.github.forezp.distributedlimitcore.exception.LimitException;
 import io.github.forezp.distributedlimitcore.limit.LimitExcutor;
 import io.github.forezp.distributedlimitcore.util.IdentifierThreadLocal;
@@ -73,7 +74,7 @@ public class LimitAop {
                 String key = parseKey( limit.key(), method, joinPoint.getArgs() );
                 entity.setKey( key );
                 entity.setSeconds( limit.seconds() );
-                if (!limitExcutor.tryAccess( entity )) {
+                if (limitExcutor.tryAccess( entity ).getResultType()!= LimitResult.ResultType.SUCCESS) {
                     throw new LimitException( "you are not access!" );
                 }
                 if (!StringUtils.isEmpty( IdentifierThreadLocal.get() )) {
